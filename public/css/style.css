@@ -1,0 +1,210 @@
+/* ---------------- BASIC CSS ----------------  */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+th, td {
+    border: 1px solid black;
+    min-width: 30px;
+    text-align: center;
+}
+
+button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+
+/* ----------------  ELEMENT CSS ---------------- */
+.home-title {
+    display: block;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.home-title a {
+    font-size: 40px;
+    color: #ff0000;
+}
+
+.content {
+    margin: 16px 8px 12px;
+}
+
+.function-bar {
+    display: flex;
+    justify-content: space-around;
+}
+
+.func-group {
+    min-width: 400px;
+    min-height: 150px;
+    border: 2px solid #666666;
+    border-radius: 8px;
+}
+
+.func-title {
+    background-color: #56aaff;   
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    text-align: center;
+}
+
+.func-title p {
+    color: #fff; 
+    padding: 6px;
+}
+
+.func-list {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+}
+
+.func-item {
+    font-size: 14px;
+    width: 50%;
+    text-align: center;
+}
+
+.func-item p {
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+
+.im-export-btn {
+    display: inline-block;
+    padding: 10px;
+    background-color: #ffcc00;
+    color: #4b4b4b;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.green-btn {
+    background-color: #00bf00;
+    color: #fff;
+}
+
+.single-item {
+    margin-top: 8px;
+    width: 100%;
+}
+
+.read-file-form {
+    display: flex;
+    justify-content: space-around;
+}
+
+.save-btn {
+    width: 72px;
+    height: 36px;
+    float: right;
+    margin-top: 12px;
+}
+
+.tool-bar {
+    margin-bottom: 12px;
+}
+
+.cancel-btn {
+    width: 72px;
+    height: 36px;
+    font-size: 12px;
+    background-color: #ff7b00;
+}
+
+.cancel-btn:hover {
+    text-decoration: none;
+}
+
+.excel-cell {
+    border: none;
+    display: block;
+    width: 100%;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.modal {
+    display: none; /* Ẩn modal ban đầu */
+    position: fixed; /* Hiển thị modal trên cùng */
+    z-index: 1; /* Đặt modal trên tất cả các phần tử khác */
+    left: 0;
+    top: 0;
+    width: 100%; /* Chiều rộng của modal */
+    height: 100%; /* Chiều cao của modal */
+    overflow: auto; /* Cho phép cuộn nếu nội dung quá dài */
+    background-color: rgba(0, 0, 0, 0.4); /* Màu nền của modal */
+}
+
+.modal-content {
+    background-color: #fefefe; /* Màu nền của nội dung trong modal */
+    margin: 15% auto; /* Canh giữa theo chiều dọc và ngang */
+    padding: 8px 20px 20px;
+    border: 2px solid #888; /* Viền của modal */
+    border-radius: 6px;
+    width: 80%; 
+    height: 30%;
+    margin-top: 30vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-title {
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    color: #FF3300;
+}
+
+.modal-message {
+    width: 90%;
+    height: 90%;
+    margin: auto;
+    padding: 8px;
+    border: 3px solid #FF9966;
+    border-radius: 3px;
+}
+
+.modal-btn {
+    width: 70px;
+    height: 36px;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #0099FF;
+    margin-left: auto;
+    margin-top: 12px;
+}
