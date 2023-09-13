@@ -103,6 +103,26 @@ button {
     font-weight: bold;
 }
 
+.attention {
+    text-align: left;
+    margin: 12px;
+}
+
+.attention b {
+    font-size: 16px;
+    color: #ff0000;
+}
+
+.example-format {
+    width: 100%;
+    margin: 12px auto;
+}
+
+.pink-btn {
+    background-color: #FFCCFF;
+    color: #999;
+}
+
 .im-export-btn {
     display: inline-block;
     padding: 10px;

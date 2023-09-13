@@ -47,8 +47,7 @@ class excelController extends Controller
         }
     }
     
-    public function save(Request $request)
-    {
+    public function save(Request $request) {
         $data = $request->input('cell');
         $columnCount = $request->input('columnCount');
         $rowCount = $request->input('rowCount');
@@ -79,5 +78,45 @@ class excelController extends Controller
     
         // Ghi tệp Excel vào output
         $writer->save('php://output');
+    }
+
+    public function chart(Request $request) {
+
+        // Lưu tệp Excel tải lên vào thư mục tạm
+        $file = $request->file('file');
+
+        // Lưu file Excel vào thư mục tạm
+        $tempFilePath = $file->store('temp', 'public');
+        $filePath = storage_path('app/public/' . $tempFilePath);
+
+        $request->session()->put('filePath', $filePath);
+        $worksheet = $this->loadWorksheet($filePath);
+        $data = $worksheet->toArray();
+
+        // Xử lý dữ liệu và chuẩn bị dữ liệu cho biểu đồ
+        $columns = [];
+        $labels = $data[0]; // hàng đầu tiên chứa nhãn, lưu trữ nó vào biến $labels
+        $labels = array_slice($labels, 1); // bỏ qua ô đầu tiên của hàng
+
+        for ($i = 1; $i < count($data); $i++) {
+            $row = $data[$i];
+            $column = [];
+
+            $column['label'] = $row[0]; // cột đầu tiên trong mỗi hàng chứa tên thành phần
+
+            $values = [];
+            for ($j = 1; $j < count($row); $j++) {
+                $values[] = $row[$j]; // các cột tiếp theo chứa giá trị
+            }
+            $column['values'] = $values;
+
+            $columns[] = $column;
+        }
+
+        // Truyền dữ liệu cho blade view hiển thị biểu đồ
+        return view('chart')->with([
+            'labels' => $labels,
+            'columns' => json_encode($columns),
+        ]);
     }
 }

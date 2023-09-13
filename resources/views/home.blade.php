@@ -41,5 +41,51 @@
                 </form>
             </div>
         </div>
+
+        <div class="func-group">
+            <div class="func-title">
+                <p>Create chart from Excel file</p>
+            </div>
+            <div class="func-item single-item">
+                <p>Select file to create chart:</p>
+                <form class="read-file-form" action="/chart" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="file" class="read-form-input" name="file" accept=".xlsx,.xls">
+                    <button type="submit" class=" pink-btn">Create</button>
+                </form>
+                <div class="attention">
+                    <b><u>Attention:</u></b>
+                    <p class="attention-text">
+                        Please reformat the excel file in the following format <br> for the most accurate results
+                    </p>
+                    <table class="example-format">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Title 1</th>
+                                <th>Title 2</th>
+                                <th>Title 3</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>name A</td>
+                                <td>content 1</td>
+                                <td>content 2</td>
+                                <td>content 3</td>
+                            </tr>
+                            <tr>
+                                <td>name B</td>
+                                <td>content 1</td>
+                                <td>content 2</td>
+                                <td>content 3</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
     </div>
 @endsection

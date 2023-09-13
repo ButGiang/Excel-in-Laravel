@@ -10,6 +10,7 @@ Route::get('/', function() {
 
 Route::post('/readFile', [excelController::class, 'store']);
 Route::post('/saveFile', [excelController::class, 'save']);
+Route::post('/chart', [excelController::class, 'chart'])->name('chart');
 
 Route::post('/import',[UserController::class, 'import'])->name('import-users');
 Route::get('/export-users',[UserController::class, 'exportUsers'])->name('export-users');
