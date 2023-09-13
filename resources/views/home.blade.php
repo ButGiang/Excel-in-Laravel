@@ -8,13 +8,22 @@
             </div>
 
             <div class="func-list">
+
                 <div class="func-item">
                     <p>Import file here:</p>
-                    <button class="im-export-btn green-btn">Import USER file</button>
+                    <form action="{{ route('import-users') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="file" name="file" class="form-control">
+                        <br>
+                        <button class="im-export-btn green-btn">Import USER data</button>
+                    </form>
                 </div>
+                <div class="horizontal-lines"></div>
                 <div class="func-item">
                     <p>Export file here:</p>
-                    <button class="im-export-btn">Export USER file</button>
+                    <a class="im-export-btn" href="{{ route('export-users') }}">
+						Export USER Data
+					</a>
                 </div>
             </div>
         </div>

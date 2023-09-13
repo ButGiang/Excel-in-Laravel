@@ -11,8 +11,8 @@
 <body>
     <div id="myModal" class="modal">
         <div class="modal-content">
-            <span class="modal-title">Error log</span>
-            <p class="modal-message">{{ $error }}</p>
+            <span class="modal-title">Message:</span>
+            <p class="modal-message">{{ $message }}</p>
             <button class="modal-btn" onclick="window.history.back()">OK</button>
         </div>
     </div>

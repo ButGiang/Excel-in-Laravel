@@ -41,13 +41,14 @@ class excelController extends Controller
                 'rowCount' => $rowCount
             ]);
         } else {
-            return view('error', [
+            return view('Notification', [
                 'error' => 'File không tồn tại hoặc định dạng không phù hợp. Vui lòng thử lại.'
             ]);
         }
     }
     
-    public function save(Request $request) {
+    public function save(Request $request)
+    {
         // Lấy dữ liệu từ request
         $cellData = $request->input('cell');
     
@@ -62,25 +63,26 @@ class excelController extends Controller
         $startColumn = 1;
     
         // Lưu dữ liệu vào file Excel
-        $rowIndex = 0;
-        $maxColumnIndex = 0;
+        $rowCount = $worksheet->getHighestRow(); // Số hàng trong file Excel gốc
+        $columnCount = Coordinate::columnIndexFromString($worksheet->getHighestColumn()); // Số cột trong file Excel gốc
     
-        $rows = $worksheet->toArray();
-        foreach ($rows as $row) {
-            $columnIndex = 0;
-            foreach ($row as $cell) {
-                $cellValue = $cellData[($rowIndex * $maxColumnIndex) + $columnIndex] ?? '';
-                $currentRow = $startRow + $rowIndex;
-                $currentColumn = Coordinate::stringFromColumnIndex($startColumn + $columnIndex);
-                $worksheet->setCellValue($currentColumn . $currentRow, $cellValue);
-                $columnIndex++;
+        $rowIndex = 0;
+        $columnIndex = 0;
+        foreach ($cellData as $cellValue) {
+            $currentRow = $startRow + $rowIndex;
+            $currentColumnIndex = $startColumn + $columnIndex;
+            $currentColumn = Coordinate::stringFromColumnIndex($currentColumnIndex);
+            $worksheet->setCellValueByColumnAndRow($currentColumnIndex, $currentRow, $cellValue);
+    
+            $columnIndex++;
+            if ($columnIndex >= $columnCount) {
+                $columnIndex = 0;
+                $rowIndex++;
             }
-            $maxColumnIndex = max($maxColumnIndex, $columnIndex);
-            $rowIndex++;
         }
     
         // Xóa các hàng còn lại nếu $cellData có ít hơn số hàng trong file
-        $remainingRows = count($rows) - $rowIndex;
+        $remainingRows = $rowCount - $rowIndex - 1;
         if ($remainingRows > 0) {
             $worksheet->removeRow($rowIndex + 1, $remainingRows);
         }

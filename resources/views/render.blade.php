@@ -38,10 +38,17 @@
             @for ($i = 0; $i < $rowCount; $i++)
                 <tr>
                     <td>{{ $rowIndex }}</td>
-                    @php $columnIndex = 2; @endphp
+                    @php $columnIndex = 1; @endphp
                     @for ($j = 0; $j < $columnCount; $j++)
                         <td>
-                            <input type="text" class="excel-cell" name="cell[]" value="">
+                            @php
+                                $cellValue = ''; 
+                                $cell = $worksheet->getCell(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndex) . $rowIndex);
+                                if ($cell) {
+                                    $cellValue = $cell->getValue();
+                                }
+                            @endphp
+                            <input type="text" class="excel-cell" name="cell[]" value="{{ $cellValue }}">
                         </td>
                         @php $columnIndex++; @endphp
                     @endfor
@@ -63,8 +70,33 @@
             columnCount++;
             columnCountInput.value = columnCount;
 
-            // Tạo lại bảng với số lượng cột mới
+            // Lưu trữ giá trị của các ô input hiện có
+            var cellValues = [];
+            var inputElements = document.getElementsByClassName("excel-cell");
+            for (var i = 0; i < inputElements.length; i++) {
+                var columnIndex = i % (columnCount - 1);
+                cellValues.push(inputElements[i].value);
+            }
+
+            // Cập nhật số lượng cột mới
             recreateTable();
+
+            // Khôi phục giá trị của các ô input
+            var newInputElements = document.getElementsByClassName("excel-cell");
+            for (var i = 0; i < newInputElements.length; i++) {
+                var columnIndex = i % columnCount;
+                var cellIndex = Math.floor(i / columnCount);
+                if (columnIndex !== columnCount - 1) {
+                    var oldValueIndex = cellIndex * (columnCount - 1) + columnIndex;
+                    if (oldValueIndex < cellValues.length) {
+                        newInputElements[i].value = cellValues[oldValueIndex];
+                    } else {
+                        newInputElements[i].value = '';
+                    }
+                } else {
+                    newInputElements[i].value = '';
+                }
+            }
         }
 
         function addRow() {
@@ -73,8 +105,26 @@
             rowCount++;
             rowCountInput.value = rowCount;
 
-            // Tạo lại bảng với số lượng hàng mới
+            // Lưu trữ giá trị của các ô input hiện có
+            var cellValues = [];
+            var inputElements = document.getElementsByClassName("excel-cell");
+            for (var i = 0; i < inputElements.length; i++) {
+                cellValues.push(inputElements[i].value);
+            }
+
+            // Cập nhật số lượng hàng mới
             recreateTable();
+
+            // Khôi phục giá trị của các ô input
+            var newInputElements = document.getElementsByClassName("excel-cell");
+            for(var i = 0; i < newInputElements.length; i++) {
+                if(i < cellValues.length) {
+                    newInputElements[i].value = cellValues[i];
+                }
+                else {
+                    newInputElements[i].value = '';
+                }
+            }
         }
 
         function recreateTable() {
