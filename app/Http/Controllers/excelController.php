@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
-use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\Response;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class excelController extends Controller
 {
@@ -49,53 +49,35 @@ class excelController extends Controller
     
     public function save(Request $request)
     {
-        // Lấy dữ liệu từ request
-        $cellData = $request->input('cell');
+        $data = $request->input('cell');
+        $columnCount = $request->input('columnCount');
+        $rowCount = $request->input('rowCount');
     
-        $filePath = $request->session()->get('filePath');
-        // Load file Excel gốc
-        $spreadsheet = IOFactory::load($filePath);
-        // Lấy sheet đầu tiên
-        $worksheet = $spreadsheet->getActiveSheet();
+        // Tạo một đối tượng Spreadsheet mới
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
     
-        // Xác định vị trí ô bắt đầu lưu dữ liệu
-        $startRow = 1;
-        $startColumn = 1;
-    
-        // Lưu dữ liệu vào file Excel
-        $rowCount = $worksheet->getHighestRow(); // Số hàng trong file Excel gốc
-        $columnCount = Coordinate::columnIndexFromString($worksheet->getHighestColumn()); // Số cột trong file Excel gốc
-    
-        $rowIndex = 0;
-        $columnIndex = 0;
-        foreach ($cellData as $cellValue) {
-            $currentRow = $startRow + $rowIndex;
-            $currentColumnIndex = $startColumn + $columnIndex;
-            $currentColumn = Coordinate::stringFromColumnIndex($currentColumnIndex);
-            $worksheet->setCellValueByColumnAndRow($currentColumnIndex, $currentRow, $cellValue);
-    
-            $columnIndex++;
-            if ($columnIndex >= $columnCount) {
-                $columnIndex = 0;
-                $rowIndex++;
+        // Ghi dữ liệu vào từng ô trong bảng
+        $cellIndex = 0;
+        for ($i = 0; $i < $rowCount; $i++) {
+            for ($j = 0; $j < $columnCount; $j++) {
+                $cellValue = $data[$cellIndex];
+                $columnLetter = Coordinate::stringFromColumnIndex($j + 1);
+                $cellCoordinate = $columnLetter . ($i + 1);
+                $sheet->setCellValue($cellCoordinate, $cellValue);
+                $cellIndex++;
             }
         }
     
-        // Xóa các hàng còn lại nếu $cellData có ít hơn số hàng trong file
-        $remainingRows = $rowCount - $rowIndex - 1;
-        if ($remainingRows > 0) {
-            $worksheet->removeRow($rowIndex + 1, $remainingRows);
-        }
+        // Tạo một đối tượng Writer để ghi tệp Excel
+        $writer = new Xlsx($spreadsheet);
     
-        // Tạo một tên file mới cho file Excel đã chỉnh sửa
-        $newFileName = 'newFile.xlsx'; // Tên file mới
+        // Đặt header để trình duyệt nhận diện tệp Excel
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="newFile.xlsx"');
+        header('Cache-Control: max-age=0');
     
-        // Lưu file Excel sau khi đã cập nhật dữ liệu
-        $savePath = storage_path('app/public/' . $newFileName); // Đường dẫn và tên file để lưu
-        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-        $writer->save($savePath);
-    
-        // Trả về file Excel đã chỉnh sửa cho người dùng tải về
-        return response()->download($savePath, $newFileName)->deleteFileAfterSend(true);
+        // Ghi tệp Excel vào output
+        $writer->save('php://output');
     }
 }
