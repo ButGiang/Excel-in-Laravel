@@ -8,12 +8,13 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class ImportUser implements ToModel, WithHeadingRow
 {
-    public function model(array $row)
+    // đọc những dữ liệu từ những cột có tiêu đề tương ứng
+    public function model(array $col)
     {
         return new User([
-            'name' => $row['Name'],
-            'email' => $row['Email'],
-            'password' => bcrypt($row['password']),
+            'name' => $col['Name'],
+            'email' => $col['Email'],
+            'password' => bcrypt($col['password']),
         ]);
     }
 }

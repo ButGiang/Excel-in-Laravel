@@ -12,7 +12,7 @@
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="modal-title">Message:</span>
-            <p class="modal-message">{{ $message }}</p>
+            <p class="modal-message">{!! $message !!}</p>
             <button class="modal-btn" onclick="window.history.back()">OK</button>
         </div>
     </div>
